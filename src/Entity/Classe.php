@@ -24,24 +24,17 @@ class Classe
     /**
      * @var Collection<int, Eleve>
      */
-    #[ORM\OneToMany(targetEntity: Eleve::class, mappedBy: 'classe')]
-    private Collection $Eleve;
-
-    /**
-     * @var Collection<int, Eleve>
-     */
-    #[ORM\OneToMany(targetEntity: Eleve::class, mappedBy: 'id_classe')]
+    #[ORM\OneToMany(targetEntity: Eleve::class, mappedBy: 'classe', orphanRemoval: true)]
     private Collection $eleves;
 
     /**
      * @var Collection<int, Enseignant>
      */
-    #[ORM\OneToMany(targetEntity: Enseignant::class, mappedBy: 'classe_id')]
+    #[ORM\OneToMany(targetEntity: Enseignant::class, mappedBy: 'classe')]
     private Collection $enseignants;
 
     public function __construct()
     {
-        $this->Eleve = new ArrayCollection();
         $this->eleves = new ArrayCollection();
         $this->enseignants = new ArrayCollection();
     }
@@ -78,15 +71,15 @@ class Classe
     /**
      * @return Collection<int, Eleve>
      */
-    public function getEleve(): Collection
+    public function getEleves(): Collection
     {
-        return $this->Eleve;
+        return $this->eleves;
     }
 
     public function addEleve(Eleve $eleve): static
     {
-        if (!$this->Eleve->contains($eleve)) {
-            $this->Eleve->add($eleve);
+        if (!$this->eleves->contains($eleve)) {
+            $this->eleves->add($eleve);
             $eleve->setClasse($this);
         }
 
@@ -95,40 +88,10 @@ class Classe
 
     public function removeEleve(Eleve $eleve): static
     {
-        if ($this->Eleve->removeElement($eleve)) {
+        if ($this->eleves->removeElement($eleve)) {
             // set the owning side to null (unless already changed)
             if ($eleve->getClasse() === $this) {
                 $eleve->setClasse(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Eleve>
-     */
-    public function getEleves(): Collection
-    {
-        return $this->eleves;
-    }
-
-    public function addElefe(Eleve $elefe): static
-    {
-        if (!$this->eleves->contains($elefe)) {
-            $this->eleves->add($elefe);
-            $elefe->setIdClasse($this);
-        }
-
-        return $this;
-    }
-
-    public function removeElefe(Eleve $elefe): static
-    {
-        if ($this->eleves->removeElement($elefe)) {
-            // set the owning side to null (unless already changed)
-            if ($elefe->getIdClasse() === $this) {
-                $elefe->setIdClasse(null);
             }
         }
 
@@ -147,7 +110,7 @@ class Classe
     {
         if (!$this->enseignants->contains($enseignant)) {
             $this->enseignants->add($enseignant);
-            $enseignant->setClasseId($this);
+            $enseignant->setClasse($this);
         }
 
         return $this;
@@ -157,8 +120,8 @@ class Classe
     {
         if ($this->enseignants->removeElement($enseignant)) {
             // set the owning side to null (unless already changed)
-            if ($enseignant->getClasseId() === $this) {
-                $enseignant->setClasseId(null);
+            if ($enseignant->getClasse() === $this) {
+                $enseignant->setClasse(null);
             }
         }
 

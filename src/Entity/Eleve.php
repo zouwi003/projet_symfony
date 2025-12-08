@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EleveRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,18 +31,23 @@ class Eleve
     #[ORM\Column(length: 255)]
     private ?string $parentTelephone = null;
 
- 
-
     #[ORM\ManyToOne(inversedBy: 'eleves')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Classe $id_classe = null;
+    private ?Classe $classe = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id_eleve')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Note $note = null;
+    /**
+     * @var Collection<int, Note>
+     */
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'eleve', orphanRemoval: true)]
+    private Collection $notes;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $id_user = null;
+
+    public function __construct()
+    {
+        $this->notes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -108,26 +115,44 @@ class Eleve
     }
 
     
-    public function getIdClasse(): ?Classe
+    public function getClasse(): ?Classe
     {
-        return $this->id_classe;
+        return $this->classe;
     }
 
-    public function setIdClasse(?Classe $id_classe): static
+    public function setClasse(?Classe $classe): static
     {
-        $this->id_classe = $id_classe;
+        $this->classe = $classe;
 
         return $this;
     }
 
-    public function getNote(): ?Note
+    /**
+     * @return Collection<int, Note>
+     */
+    public function getNotes(): Collection
     {
-        return $this->note;
+        return $this->notes;
     }
 
-    public function setNote(?Note $note): static
+    public function addNote(Note $note): static
     {
-        $this->note = $note;
+        if (!$this->notes->contains($note)) {
+            $this->notes->add($note);
+            $note->setEleve($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): static
+    {
+        if ($this->notes->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getEleve() === $this) {
+                $note->setEleve(null);
+            }
+        }
 
         return $this;
     }

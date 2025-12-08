@@ -21,19 +21,22 @@ class Matiere
     #[ORM\Column]
     private ?int $coef = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id_matiere')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Note $note = null;
-
     /**
      * @var Collection<int, Enseignant>
      */
-    #[ORM\OneToMany(targetEntity: Enseignant::class, mappedBy: 'matiere_id')]
+    #[ORM\OneToMany(targetEntity: Enseignant::class, mappedBy: 'matiere')]
     private Collection $enseignants;
+
+    /**
+     * @var Collection<int, Note>
+     */
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'matiere', orphanRemoval: true)]
+    private Collection $notes;
 
     public function __construct()
     {
         $this->enseignants = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -65,18 +68,6 @@ class Matiere
         return $this;
     }
 
-    public function getNote(): ?Note
-    {
-        return $this->note;
-    }
-
-    public function setNote(?Note $note): static
-    {
-        $this->note = $note;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Enseignant>
      */
@@ -89,7 +80,7 @@ class Matiere
     {
         if (!$this->enseignants->contains($enseignant)) {
             $this->enseignants->add($enseignant);
-            $enseignant->setMatiereId($this);
+            $enseignant->setMatiere($this);
         }
 
         return $this;
@@ -99,8 +90,38 @@ class Matiere
     {
         if ($this->enseignants->removeElement($enseignant)) {
             // set the owning side to null (unless already changed)
-            if ($enseignant->getMatiereId() === $this) {
-                $enseignant->setMatiereId(null);
+            if ($enseignant->getMatiere() === $this) {
+                $enseignant->setMatiere(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Note>
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): static
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes->add($note);
+            $note->setMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): static
+    {
+        if ($this->notes->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getMatiere() === $this) {
+                $note->setMatiere(null);
             }
         }
 

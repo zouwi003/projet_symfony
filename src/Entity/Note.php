@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\NoteRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
@@ -18,27 +16,17 @@ class Note
     #[ORM\Column]
     private ?float $note = null;
 
-    /**
-     * @var Collection<int, Eleve>
-     */
-    #[ORM\OneToMany(targetEntity: Eleve::class, mappedBy: 'note')]
-    private Collection $id_eleve;
-
-    /**
-     * @var Collection<int, Matiere>
-     */
-    #[ORM\OneToMany(targetEntity: Matiere::class, mappedBy: 'note')]
-    private Collection $id_matiere;
+    #[ORM\ManyToOne(inversedBy: 'notes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Eleve $eleve = null;
 
     #[ORM\ManyToOne(inversedBy: 'notes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Enseignant $enseignant_id = null;
+    private ?Matiere $matiere = null;
 
-    public function __construct()
-    {
-        $this->id_eleve = new ArrayCollection();
-        $this->id_matiere = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'notes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Enseignant $enseignant = null;
 
     public function getId(): ?int
     {
@@ -57,74 +45,38 @@ class Note
         return $this;
     }
 
-    /**
-     * @return Collection<int, Eleve>
-     */
-    public function getIdEleve(): Collection
+    public function getEleve(): ?Eleve
     {
-        return $this->id_eleve;
+        return $this->eleve;
     }
 
-    public function addIdEleve(Eleve $idEleve): static
+    public function setEleve(?Eleve $eleve): static
     {
-        if (!$this->id_eleve->contains($idEleve)) {
-            $this->id_eleve->add($idEleve);
-            $idEleve->setNote($this);
-        }
+        $this->eleve = $eleve;
 
         return $this;
     }
 
-    public function removeIdEleve(Eleve $idEleve): static
+    public function getMatiere(): ?Matiere
     {
-        if ($this->id_eleve->removeElement($idEleve)) {
-            // set the owning side to null (unless already changed)
-            if ($idEleve->getNote() === $this) {
-                $idEleve->setNote(null);
-            }
-        }
+        return $this->matiere;
+    }
+
+    public function setMatiere(?Matiere $matiere): static
+    {
+        $this->matiere = $matiere;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Matiere>
-     */
-    public function getIdMatiere(): Collection
+    public function getEnseignant(): ?Enseignant
     {
-        return $this->id_matiere;
+        return $this->enseignant;
     }
 
-    public function addIdMatiere(Matiere $idMatiere): static
+    public function setEnseignant(?Enseignant $enseignant): static
     {
-        if (!$this->id_matiere->contains($idMatiere)) {
-            $this->id_matiere->add($idMatiere);
-            $idMatiere->setNote($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdMatiere(Matiere $idMatiere): static
-    {
-        if ($this->id_matiere->removeElement($idMatiere)) {
-            // set the owning side to null (unless already changed)
-            if ($idMatiere->getNote() === $this) {
-                $idMatiere->setNote(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getEnseignantId(): ?Enseignant
-    {
-        return $this->enseignant_id;
-    }
-
-    public function setEnseignantId(?Enseignant $enseignant_id): static
-    {
-        $this->enseignant_id = $enseignant_id;
+        $this->enseignant = $enseignant;
 
         return $this;
     }

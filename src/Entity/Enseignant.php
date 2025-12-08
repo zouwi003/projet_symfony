@@ -33,15 +33,15 @@ class Enseignant
 
     #[ORM\ManyToOne(inversedBy: 'enseignants')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Matiere $matiere_id = null;
+    private ?Matiere $matiere = null;
 
     #[ORM\ManyToOne(inversedBy: 'enseignants')]
-    private ?Classe $classe_id = null;
+    private ?Classe $classe = null;
 
     /**
      * @var Collection<int, Note>
      */
-    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'enseignant_id')]
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'enseignant')]
     private Collection $notes;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
@@ -117,26 +117,26 @@ class Enseignant
         return $this;
     }
 
-    public function getMatiereId(): ?Matiere
+    public function getMatiere(): ?Matiere
     {
-        return $this->matiere_id;
+        return $this->matiere;
     }
 
-    public function setMatiereId(?Matiere $matiere_id): static
+    public function setMatiere(?Matiere $matiere): static
     {
-        $this->matiere_id = $matiere_id;
+        $this->matiere = $matiere;
 
         return $this;
     }
 
-    public function getClasseId(): ?Classe
+    public function getClasse(): ?Classe
     {
-        return $this->classe_id;
+        return $this->classe;
     }
 
-    public function setClasseId(?Classe $classe_id): static
+    public function setClasse(?Classe $classe): static
     {
-        $this->classe_id = $classe_id;
+        $this->classe = $classe;
 
         return $this;
     }
@@ -153,7 +153,7 @@ class Enseignant
     {
         if (!$this->notes->contains($note)) {
             $this->notes->add($note);
-            $note->setEnseignantId($this);
+            $note->setEnseignant($this);
         }
 
         return $this;
@@ -163,8 +163,8 @@ class Enseignant
     {
         if ($this->notes->removeElement($note)) {
             // set the owning side to null (unless already changed)
-            if ($note->getEnseignantId() === $this) {
-                $note->setEnseignantId(null);
+            if ($note->getEnseignant() === $this) {
+                $note->setEnseignant(null);
             }
         }
 
