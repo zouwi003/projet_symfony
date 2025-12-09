@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Matières{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1><i class="bi bi-book-fill"></i> Liste des Matières</h1>
+        <p class="text-muted mb-0">Gérez toutes les matières enseignées</p>
+    </div>
+    <a href="{{ path('app_matiere_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nouvelle matière
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Coefficient</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for matiere in matieres %}
+                    <tr>
+                        <td><strong>#{{ matiere.id }}</strong></td>
+                        <td><strong>{{ matiere.nom }}</strong></td>
+                        <td><span class="badge bg-info">{{ matiere.coef }}</span></td>
+                        <td class="text-end">
+                            <div class="btn-group" role="group">
+                                <a href="{{ path('app_matiere_show', {'id': matiere.id}) }}" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_matiere_edit', {'id': matiere.id}) }}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5">
+                            <i class="bi bi-inbox" style="font-size: 3rem; color: #d1d5db;"></i>
+                            <p class="text-muted mt-3">Aucune matière trouvée</p>
+                            <a href="{{ path('app_matiere_new') }}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Créer la première matière
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Élèves{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1><i class="bi bi-person-badge-fill"></i> Liste des Élèves</h1>
+        <p class="text-muted mb-0">Gérez tous les élèves de l'établissement</p>
+    </div>
+    <a href="{{ path('app_eleve_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nouvel élève
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Date de naissance</th>
+                        <th>Classe</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for eleve in eleves %}
+                    <tr>
+                        <td><strong>#{{ eleve.id }}</strong></td>
+                        <td>{{ eleve.nom }}</td>
+                        <td>{{ eleve.prenom }}</td>
+                        <td>{{ eleve.dateNaissance ? eleve.dateNaissance|date('d/m/Y') : '' }}</td>
+                        <td>
+                            {% if eleve.classe %}
+                                <a href="{{ path('app_classe_show', {'id': eleve.classe.id}) }}" class="badge bg-info text-decoration-none">
+                                    {{ eleve.classe.nom }}
+                                </a>
+                            {% else %}
+                                <span class="badge bg-secondary">Aucune classe</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group" role="group">
+                                <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{{ path('app_eleve_notes', {'id': eleve.id}) }}" class="btn btn-sm btn-success">
+                                    <i class="bi bi-clipboard-data"></i>
+                                </a>
+                                <a href="{{ path('app_eleve_bulletin', {'id': eleve.id}) }}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="bi bi-inbox" style="font-size: 3rem; color: #d1d5db;"></i>
+                            <p class="text-muted mt-3">Aucun élève trouvé</p>
+                            <a href="{{ path('app_eleve_new') }}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Créer le premier élève
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

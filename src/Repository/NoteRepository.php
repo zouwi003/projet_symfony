@@ -50,7 +50,7 @@ class NoteRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('n')
             ->select('m.id as matiere_id, m.nom as matiere_nom, m.coef, AVG(n.note) as moyenne')
             ->join('n.matiere', 'm')
-            ->where('n.eleve = :eleveId')
+            ->where('n.eleve.id = :eleveId')
             ->setParameter('eleveId', $eleveId)
             ->groupBy('m.id', 'm.nom', 'm.coef')
             ->getQuery()
@@ -64,7 +64,7 @@ class NoteRepository extends ServiceEntityRepository
     {
         $result = $this->createQueryBuilder('n')
             ->select('AVG(n.note) as moyenne')
-            ->where('n.eleve = :eleveId')
+            ->where('n.eleve.id = :eleveId')
             ->setParameter('eleveId', $eleveId)
             ->getQuery()
             ->getSingleScalarResult();

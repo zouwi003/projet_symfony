@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Matière {{ matiere.nom }}{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1><i class="bi bi-book-fill"></i> {{ matiere.nom }}</h1>
+        <p class="text-muted mb-0">Détails de la matière</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ path('app_matiere_edit', {'id': matiere.id}) }}" class="btn btn-warning">
+            <i class="bi bi-pencil"></i> Modifier
+        </a>
+        <a href="{{ path('app_matiere_index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-info-circle"></i> Informations de la matière
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th width="200"><i class="bi bi-hash"></i> ID</th>
+                            <td><strong>#{{ matiere.id }}</strong></td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-tag"></i> Nom</th>
+                            <td>{{ matiere.nom }}</td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-graph-up"></i> Coefficient</th>
+                            <td><span class="badge bg-info fs-6">{{ matiere.coef }}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-bar-chart"></i> Statistiques
+            </div>
+            <div class="card-body text-center">
+                <div class="stats-card">
+                    <div class="number">{{ matiere.notes|length }}</div>
+                    <div class="label">Note(s)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

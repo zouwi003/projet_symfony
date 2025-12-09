@@ -1,0 +1,60 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': ''}}) }}
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.nom, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'élève'}}) }}
+                {{ form_errors(form.nom) }}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.prenom, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom de l\'élève'}}) }}
+                {{ form_errors(form.prenom) }}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.dateNaissance, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.dateNaissance, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.dateNaissance) }}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.classe, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.classe, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.classe) }}
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="mb-3">
+                {{ form_label(form.adresse, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.adresse, {'attr': {'class': 'form-control', 'placeholder': 'Adresse complète'}}) }}
+                {{ form_errors(form.adresse) }}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.parentTelephone, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.parentTelephone, {'attr': {'class': 'form-control', 'placeholder': 'Ex: +33 6 12 34 56 78'}}) }}
+                {{ form_errors(form.parentTelephone) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i> {{ button_label|default('Enregistrer') }}
+        </button>
+        <a href="{{ path('app_eleve_index') }}" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Annuler
+        </a>
+    </div>
+{{ form_end(form) }}

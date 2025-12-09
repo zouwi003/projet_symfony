@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bulletin de {{ eleve.nom }} {{ eleve.prenom }}{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h1><i class="bi bi-file-earmark-text-fill"></i> Bulletin scolaire</h1>
+    <p class="text-muted mb-0">{{ eleve.nom }} {{ eleve.prenom }} - {{ eleve.classe ? eleve.classe.nom ~ ' - ' ~ eleve.classe.niveau : 'Aucune classe' }}</p>
+</div>
+
+{% if notes|length > 0 %}
+<div class="row g-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-clipboard-data"></i> Détail des notes
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Matière</th>
+                                <th>Coefficient</th>
+                                <th>Note</th>
+                                <th>Enseignant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for note in notes %}
+                            <tr>
+                                <td><strong>{{ note.matiere.nom }}</strong></td>
+                                <td><span class="badge bg-secondary">{{ note.matiere.coef }}</span></td>
+                                <td>
+                                    <span class="badge {% if note.note >= 16 %}bg-success{% elseif note.note >= 12 %}bg-info{% elseif note.note >= 10 %}bg-warning{% else %}bg-danger{% endif %} fs-6">
+                                        {{ note.note }}/20
+                                    </span>
+                                </td>
+                                <td>{{ note.enseignant.nom }} {{ note.enseignant.prenom }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if moyennesParMatiere|length > 0 %}
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-graph-up"></i> Moyennes par matière
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Matière</th>
+                                <th>Coefficient</th>
+                                <th>Moyenne</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for moyenne in moyennesParMatiere %}
+                            <tr>
+                                <td><strong>{{ moyenne.matiere_nom }}</strong></td>
+                                <td><span class="badge bg-secondary">{{ moyenne.coef }}</span></td>
+                                <td>
+                                    <span class="badge {% if moyenne.moyenne >= 16 %}bg-success{% elseif moyenne.moyenne >= 12 %}bg-info{% elseif moyenne.moyenne >= 10 %}bg-warning{% else %}bg-danger{% endif %} fs-6">
+                                        {{ moyenne.moyenne|number_format(2, ',', ' ') }}/20
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if moyenneGenerale %}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-trophy-fill" style="font-size: 3rem; color: #f59e0b;"></i>
+                <h3 class="mt-3">Moyenne générale</h3>
+                <div class="display-4 fw-bold {% if moyenneGenerale >= 16 %}text-success{% elseif moyenneGenerale >= 12 %}text-info{% elseif moyenneGenerale >= 10 %}text-warning{% else %}text-danger{% endif %}">
+                    {{ moyenneGenerale|number_format(2, ',', ' ') }}/20
+                </div>
+                <p class="text-muted mt-2">
+                    {% if moyenneGenerale >= 16 %}
+                        <span class="badge bg-success">Excellent</span>
+                    {% elseif moyenneGenerale >= 12 %}
+                        <span class="badge bg-info">Bien</span>
+                    {% elseif moyenneGenerale >= 10 %}
+                        <span class="badge bg-warning">Passable</span>
+                    {% else %}
+                        <span class="badge bg-danger">Insuffisant</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="mt-3 d-flex gap-2">
+    <a href="{{ path('app_eleve_notes', {'id': eleve.id}) }}" class="btn btn-info">
+        <i class="bi bi-clipboard-data"></i> Voir toutes les notes
+    </a>
+    <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Retour au profil
+    </a>
+</div>
+{% else %}
+<div class="card">
+    <div class="card-body text-center py-5">
+        <i class="bi bi-inbox" style="font-size: 4rem; color: #d1d5db;"></i>
+        <h4 class="mt-3">Aucune note enregistrée</h4>
+        <p class="text-muted">Cet élève n'a pas encore de notes.</p>
+        <a href="{{ path('app_note_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Ajouter la première note
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

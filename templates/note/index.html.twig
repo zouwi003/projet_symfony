@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Notes{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1><i class="bi bi-clipboard-data-fill"></i> Liste des Notes</h1>
+        <p class="text-muted mb-0">Gérez toutes les notes des élèves</p>
+    </div>
+    <a href="{{ path('app_note_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nouvelle note
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Élève</th>
+                        <th>Matière</th>
+                        <th>Note</th>
+                        <th>Enseignant</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for note in notes %}
+                    <tr>
+                        <td><strong>#{{ note.id }}</strong></td>
+                        <td>
+                            <a href="{{ path('app_eleve_show', {'id': note.eleve.id}) }}" class="text-decoration-none">
+                                {{ note.eleve.nom }} {{ note.eleve.prenom }}
+                            </a>
+                        </td>
+                        <td>
+                            <strong>{{ note.matiere.nom }}</strong>
+                            <span class="badge bg-secondary ms-2">Coef. {{ note.matiere.coef }}</span>
+                        </td>
+                        <td>
+                            <span class="badge {% if note.note >= 16 %}bg-success{% elseif note.note >= 12 %}bg-info{% elseif note.note >= 10 %}bg-warning{% else %}bg-danger{% endif %} fs-6">
+                                {{ note.note }}/20
+                            </span>
+                        </td>
+                        <td>{{ note.enseignant.nom }} {{ note.enseignant.prenom }}</td>
+                        <td class="text-end">
+                            <div class="btn-group" role="group">
+                                <a href="{{ path('app_note_show', {'id': note.id}) }}" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_note_edit', {'id': note.id}) }}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="bi bi-inbox" style="font-size: 3rem; color: #d1d5db;"></i>
+                            <p class="text-muted mt-3">Aucune note trouvée</p>
+                            <a href="{{ path('app_note_new') }}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Créer la première note
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

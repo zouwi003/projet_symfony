@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Note #{{ note.id }}{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1><i class="bi bi-clipboard-data-fill"></i> Détail de la note</h1>
+        <p class="text-muted mb-0">Informations complètes sur la note</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ path('app_note_edit', {'id': note.id}) }}" class="btn btn-warning">
+            <i class="bi bi-pencil"></i> Modifier
+        </a>
+        <a href="{{ path('app_note_index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-info-circle"></i> Informations de la note
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th width="200"><i class="bi bi-hash"></i> ID</th>
+                            <td><strong>#{{ note.id }}</strong></td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-star-fill"></i> Note</th>
+                            <td>
+                                <span class="badge {% if note.note >= 16 %}bg-success{% elseif note.note >= 12 %}bg-info{% elseif note.note >= 10 %}bg-warning{% else %}bg-danger{% endif %} fs-4">
+                                    {{ note.note }}/20
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-person-badge"></i> Élève</th>
+                            <td>
+                                <a href="{{ path('app_eleve_show', {'id': note.eleve.id}) }}" class="text-decoration-none">
+                                    <strong>{{ note.eleve.nom }} {{ note.eleve.prenom }}</strong>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-book"></i> Matière</th>
+                            <td>
+                                <strong>{{ note.matiere.nom }}</strong>
+                                <span class="badge bg-secondary ms-2">Coefficient: {{ note.matiere.coef }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-person-workspace"></i> Enseignant</th>
+                            <td>{{ note.enseignant.nom }} {{ note.enseignant.prenom }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-lightning-charge"></i> Actions rapides
+            </div>
+            <div class="card-body d-grid gap-2">
+                <a href="{{ path('app_eleve_show', {'id': note.eleve.id}) }}" class="btn btn-info">
+                    <i class="bi bi-person-badge"></i> Voir l'élève
+                </a>
+                <a href="{{ path('app_eleve_notes', {'id': note.eleve.id}) }}" class="btn btn-success">
+                    <i class="bi bi-clipboard-data"></i> Toutes les notes
+                </a>
+                <a href="{{ path('app_eleve_bulletin', {'id': note.eleve.id}) }}" class="btn btn-primary">
+                    <i class="bi bi-file-earmark-text"></i> Bulletin
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

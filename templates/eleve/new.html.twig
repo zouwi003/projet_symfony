@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel Élève{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h1><i class="bi bi-person-plus-fill"></i> Créer un nouvel élève</h1>
+    <p class="text-muted mb-0">Ajoutez un nouvel élève à l'établissement</p>
+</div>
+
+<div class="card">
+    <div class="card-body p-4">
+        {{ include('eleve/_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

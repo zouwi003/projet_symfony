@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Élève {{ eleve.nom }} {{ eleve.prenom }}{% endblock %}
+
+{% block body %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1><i class="bi bi-person-badge-fill"></i> {{ eleve.nom }} {{ eleve.prenom }}</h1>
+        <p class="text-muted mb-0">Profil de l'élève</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-warning">
+            <i class="bi bi-pencil"></i> Modifier
+        </a>
+        <a href="{{ path('app_eleve_index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-info-circle"></i> Informations personnelles
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th width="200"><i class="bi bi-hash"></i> ID</th>
+                            <td><strong>#{{ eleve.id }}</strong></td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-person"></i> Nom</th>
+                            <td>{{ eleve.nom }}</td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-person-badge"></i> Prénom</th>
+                            <td>{{ eleve.prenom }}</td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-calendar-event"></i> Date de naissance</th>
+                            <td>{{ eleve.dateNaissance ? eleve.dateNaissance|date('d/m/Y') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-geo-alt"></i> Adresse</th>
+                            <td>{{ eleve.adresse }}</td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-telephone"></i> Téléphone parent</th>
+                            <td>{{ eleve.parentTelephone }}</td>
+                        </tr>
+                        <tr>
+                            <th><i class="bi bi-people"></i> Classe</th>
+                            <td>
+                                {% if eleve.classe %}
+                                    <a href="{{ path('app_classe_show', {'id': eleve.classe.id}) }}" class="badge bg-info fs-6 text-decoration-none">
+                                        {{ eleve.classe.nom }} - {{ eleve.classe.niveau }}
+                                    </a>
+                                {% else %}
+                                    <span class="badge bg-secondary">Aucune classe</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-bar-chart"></i> Statistiques
+            </div>
+            <div class="card-body text-center">
+                <div class="stats-card mb-3">
+                    <div class="number">{{ eleve.notes|length }}</div>
+                    <div class="label">Note(s)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <i class="bi bi-lightning-charge"></i> Actions rapides
+            </div>
+            <div class="card-body d-grid gap-2">
+                <a href="{{ path('app_eleve_notes', {'id': eleve.id}) }}" class="btn btn-success">
+                    <i class="bi bi-clipboard-data"></i> Voir les notes
+                </a>
+                <a href="{{ path('app_eleve_bulletin', {'id': eleve.id}) }}" class="btn btn-primary">
+                    <i class="bi bi-file-earmark-text"></i> Voir le bulletin
+                </a>
+                <a href="{{ path('app_note_new') }}" class="btn btn-info">
+                    <i class="bi bi-plus-circle"></i> Ajouter une note
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

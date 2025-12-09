@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'Élève{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h1><i class="bi bi-pencil-square"></i> Modifier l'élève</h1>
+    <p class="text-muted mb-0">Modifiez les informations de l'élève</p>
+</div>
+
+<div class="card">
+    <div class="card-body p-4">
+        {{ include('eleve/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    </div>
+</div>
+{% endblock %}
